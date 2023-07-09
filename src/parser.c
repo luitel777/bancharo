@@ -196,6 +196,11 @@ bool check_while(AST_NODE **while_node) {
         identify_next_character();
 
         {
+
+                int32_t digit = 0;
+                char buffer[256];
+                struct AST_NODE *node = malloc(sizeof(AST_NODE));
+
                 if (tokens != S_L_PAREN) {
                         reset_buf(&prev_pointer, &prev_line);
                         return false;
@@ -204,6 +209,12 @@ bool check_while(AST_NODE **while_node) {
 
                 // create node->left->value = >
                 if (tokens == GREATER || tokens == LESSER) {
+                        if (tokens == GREATER) {
+                                right_ast_node(">", GREATER, &node);
+                        }
+                        if (tokens == LESSER) {
+                                right_ast_node("<", LESSER, &node);
+                        }
 
                 } else {
                         reset_buf(&prev_pointer, &prev_line);
@@ -213,28 +224,37 @@ bool check_while(AST_NODE **while_node) {
 
                 // create node->left->left->value =
                 if (tokens == DIGIT || tokens == IDENT) {
-                } else {
-                        reset_buf(&prev_pointer, &prev_line);
-                        return false;
-                }
-                identify_next_character();
-
-                // create node->left->right->value =
-                if (tokens == DIGIT || tokens == IDENT) {
                         if (tokens == DIGIT) {
-                                int32_t value = get_number();
+                                digit = get_number();
+                                snprintf(buffer, 256, "%d", digit);
                         }
                 } else {
                         reset_buf(&prev_pointer, &prev_line);
                         return false;
                 }
+                right_ast_node(buffer, IDENT, &node->right);
+                identify_next_character();
+
+                // create node->left->right->value =
+                if (tokens == DIGIT || tokens == IDENT) {
+                        if (tokens == DIGIT) {
+                                digit = get_number();
+                                snprintf(buffer, 256, "%d", digit);
+                        }
+                } else {
+                        reset_buf(&prev_pointer, &prev_line);
+                        return false;
+                }
+                left_ast_node(buffer, DIGIT, &node->right);
                 identify_next_character();
                 if (tokens != S_R_PAREN) {
                         printf("error mismatched braces\n");
                         reset_buf(&prev_pointer, &prev_line);
                         return false;
                 }
+                *while_node = node->right;
         }
+        AST_NODE **while_temp_node = malloc(sizeof(AST_NODE));
 
         identify_next_character();
 
@@ -249,13 +269,12 @@ bool check_while(AST_NODE **while_node) {
         AST_NODE **t_p_node = malloc(sizeof(AST_NODE));
 
         (*t_p_node) = p_node;
-        (*while_node) = malloc(sizeof(AST_NODE));
-        while (check_operation(while_node)) {
+        while (check_operation(while_temp_node)) {
                 while ((p_node)->left != NULL) {
                         (p_node) = (p_node)->left;
                 }
 
-                s_node = *while_node;
+                s_node = *while_temp_node;
                 (p_node)->left = (s_node);
                 identify_next_character();
         }
@@ -270,9 +289,10 @@ bool check_while(AST_NODE **while_node) {
         }
 
         memcpy(t_node, *t_p_node, sizeof(AST_NODE));
-        *while_node = t_node;
+        *while_temp_node = t_node;
 
-        *while_node = (*while_node)->left;
+        *while_temp_node = (*while_temp_node)->left;
+        (*while_node)->left->left = (*while_temp_node);
 
         free(t_p_node);
         free(t_node);

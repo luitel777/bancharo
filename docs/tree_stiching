@@ -1,0 +1,50 @@
+creates this nodes 1
+
+
+
+					      while
+					/			   \
+				  /				    \
+				>				     +
+			   /   \               /   \
+			  /    \			  /	   	  \
+		rational	10			rational	4
+									/ \
+								   /   \
+							rational    1
+
+creates this node 2
+
+				print
+				/
+			rational
+
+attach 2 to 1
+
+					print
+				   		/
+					rational
+						/
+					      while
+					/			   \
+				  /				    \
+				>				     +
+			   /   \               /   \
+			  /    \			  /	   	  \
+		rational	10			rational	4
+									/ \
+								   /   \
+							rational    1
+if attach 1 to 2
+
+					      while
+					/			   \
+				  /				    \
+				>				     +
+			   /   \               /   \
+			  /    \			  /	   	  \
+		rational	10			rational	4
+			/						/ \
+		print					   /   \
+		  /					rational    1
+		rational

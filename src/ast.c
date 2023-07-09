@@ -55,7 +55,7 @@ AST_NODE *left_ast_node(char *lexmes, int token, AST_NODE **node) {
         }
         return *node;
 }
-void parse_tree(AST_NODE **p_tree) {
+void print_tree(AST_NODE **p_tree) {
         while (*p_tree != NULL) {
                 printf("%s\n", (*p_tree)->value);
                 if ((*p_tree)->right != NULL) {

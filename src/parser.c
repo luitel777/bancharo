@@ -296,6 +296,7 @@ bool check_while(AST_NODE **while_node) {
 
         free(t_p_node);
         free(t_node);
+        free(while_temp_node);
         return true;
 }
 

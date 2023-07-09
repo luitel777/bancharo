@@ -11,6 +11,7 @@ extern char source_buffer[429496];
 extern int32_t char_pointer;
 extern int32_t lines;
 extern int32_t column;
+extern char *value;
 
 // copies file content to local buffer
 // this is memory efficient since we do

@@ -17,4 +17,5 @@ bool is_opr();
 void set_buf(int32_t location);
 bool is_char();
 bool is_print();
+char *give_identifier();
 #endif

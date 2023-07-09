@@ -101,13 +101,16 @@ bool check_operation(AST_NODE **opr_node) {
                 if (tokens == DIGIT) {
                         digit = get_number();
                         snprintf(buffer, 256, "%d", digit);
+                        right_ast_node(buffer, DIGIT, &node->right);
+                }
+                if (tokens == IDENT) {
+                        right_ast_node(value, IDENT, &node->right);
                 }
         } else {
                 reset_buf(&prev_pointer, &prev_line);
                 opr_node = NULL;
                 return false;
         }
-        right_ast_node(buffer, IDENT, &node->right);
         identify_next_character();
 
         // node->right->val = NULL
@@ -116,13 +119,16 @@ bool check_operation(AST_NODE **opr_node) {
                 if (tokens == DIGIT) {
                         digit = get_number();
                         snprintf(buffer, 256, "%d", digit);
+                        left_ast_node(buffer, DIGIT, &node->right);
+                }
+                if (tokens == IDENT) {
+                        left_ast_node(value, IDENT, &node->right);
                 }
         } else {
                 reset_buf(&prev_pointer, &prev_line);
                 opr_node = NULL;
                 return false;
         }
-        left_ast_node(buffer, DIGIT, &node->right);
         identify_next_character();
 
         // next character will be )
@@ -227,12 +233,15 @@ bool check_while(AST_NODE **while_node) {
                         if (tokens == DIGIT) {
                                 digit = get_number();
                                 snprintf(buffer, 256, "%d", digit);
+                                right_ast_node(buffer, DIGIT, &node->right);
+                        }
+                        if (tokens == IDENT) {
+                                right_ast_node(value, IDENT, &node->right);
                         }
                 } else {
                         reset_buf(&prev_pointer, &prev_line);
                         return false;
                 }
-                right_ast_node(buffer, IDENT, &node->right);
                 identify_next_character();
 
                 // create node->left->right->value =
@@ -240,12 +249,16 @@ bool check_while(AST_NODE **while_node) {
                         if (tokens == DIGIT) {
                                 digit = get_number();
                                 snprintf(buffer, 256, "%d", digit);
+                                left_ast_node(buffer, DIGIT, &node->right);
+                        }
+                        if (tokens == IDENT) {
+                                left_ast_node(value, IDENT, &node->right);
                         }
                 } else {
                         reset_buf(&prev_pointer, &prev_line);
                         return false;
                 }
-                left_ast_node(buffer, DIGIT, &node->right);
+
                 identify_next_character();
                 if (tokens != S_R_PAREN) {
                         printf("error mismatched braces\n");

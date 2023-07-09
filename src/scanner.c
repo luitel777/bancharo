@@ -1,4 +1,5 @@
 #include "scanner.h"
+#include <string.h>
 TOKENS tokens;
 
 char next_buf() {
@@ -209,13 +210,10 @@ TOKENS identify_tokens() {
         } else if (current_char == ')') {
                 tokens = S_R_PAREN;
         } else if (current_char != '\0') {
-                char *value = give_identifier();
-                if (is_char()) {
-                        // printf("identifier found:\t %s\n", value);
-                }
+                value = NULL;
+                value = give_identifier();
                 tokens = IDENT;
                 prev_buf();
-                value = NULL;
         } else {
                 tokens = ERROR;
         }

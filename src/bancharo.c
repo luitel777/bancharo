@@ -7,6 +7,7 @@ char source_buffer[429496] = {};
 int32_t char_pointer = 0;
 int32_t lines = 1;
 int32_t column = 1;
+char *value = 0;
 
 int main(int argc, char *argv[]) {
         copy_buffer(argv[1]);

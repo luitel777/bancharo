@@ -19,7 +19,7 @@ AST_NODE expr() {
         AST_NODE **node = malloc(sizeof(AST_NODE));
         identify_tokens();
 
-        if (check_operation(&(*node)) || check_setq() ||
+        if (check_operation(&(*node)) || check_setq(&(*node)) ||
             check_while(&(*node)) || check_print(&(*node))) {
                 correct = true;
         } else {
@@ -31,43 +31,55 @@ AST_NODE expr() {
         return (**node);
 }
 
-bool check_setq() {
+bool check_setq(AST_NODE **setq_node) {
         int32_t prev_pointer = char_pointer;
         int32_t prev_line = lines;
+        struct AST_NODE *node = malloc(sizeof(AST_NODE));
 
         identify_tokens();
         if (tokens != S_L_PAREN) {
                 reset_buf(&prev_pointer, &prev_line);
+                setq_node = NULL;
                 return false;
         }
         identify_next_character();
 
         if (tokens != SETQ) {
                 reset_buf(&prev_pointer, &prev_line);
+                setq_node = NULL;
                 return false;
         }
+
+        right_ast_node("setq", SETQ, &node);
         identify_next_character();
 
         if (tokens != IDENT) {
                 reset_buf(&prev_pointer, &prev_line);
+                setq_node = NULL;
                 return false;
         }
+        right_ast_node(value, DIGIT, &node->right);
         identify_next_character();
 
         if (tokens == DIGIT || tokens == IDENT) {
                 if (tokens == DIGIT) {
-                        get_number();
+                        int32_t digit = get_number();
+                        char buffer[256];
+                        snprintf(buffer, 256, "%d", digit);
+                        left_ast_node(buffer, DIGIT, &node->right);
                 }
         } else {
                 reset_buf(&prev_pointer, &prev_line);
+                setq_node = NULL;
                 return false;
         }
         identify_next_character();
         if (tokens != S_R_PAREN) {
                 reset_buf(&prev_pointer, &prev_line);
+                setq_node = NULL;
                 return false;
         }
-        printf("setq\n");
+        *setq_node = node->right;
         return true;
 }
 
@@ -178,7 +190,7 @@ bool check_function(AST_NODE **function_node) {
         }
         identify_next_character();
 
-        if (check_setq() || check_operation(function_node)) {
+        if (check_setq(function_node) || check_operation(function_node)) {
         } else {
                 reset_buf(&prev_pointer, &prev_line);
                 return false;

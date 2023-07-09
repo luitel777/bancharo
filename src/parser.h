@@ -11,7 +11,7 @@
 AST_NODE expr();
 bool check_operation(AST_NODE **node);
 bool check_assign(AST_NODE **node);
-bool check_setq();
+bool check_setq(AST_NODE **node);
 bool check_while(AST_NODE **node);
 bool check_function(AST_NODE **node);
 bool check_print(AST_NODE **node);

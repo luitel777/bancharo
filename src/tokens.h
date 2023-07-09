@@ -7,6 +7,8 @@ enum TOKENS {
         MUL,
         DIV,
 
+        RET,
+
         DIGIT,
         IDENT,
 

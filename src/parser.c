@@ -6,7 +6,11 @@ AST_NODE **parse_syntax() {
 
         *local_node = expr();
         *tree_node = local_node;
+        while ((local_node)->left != NULL) {
+                (local_node) = (local_node)->left;
+        }
 
+        local_node->left = make_node(RET, "next instruction");
         return &(*tree_node);
 }
 

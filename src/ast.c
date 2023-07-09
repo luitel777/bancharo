@@ -1,19 +1,5 @@
 #include "parser.h"
 
-AST_NODE *make_ast_tree(AST_NODE **node) {
-        char_pointer = 0;
-        set_buf(0);
-
-        (*node) = malloc(sizeof(AST_NODE));
-        while (current_char != 0) {
-                next_buf();
-                identify_tokens();
-                if (check_operation(node)) {
-                }
-                return *node;
-        };
-}
-
 AST_NODE *make_node(int token, char *value) {
         AST_NODE *new_node = (AST_NODE *)malloc(sizeof(AST_NODE));
         new_node->left = NULL;

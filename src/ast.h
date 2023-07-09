@@ -1,3 +1,6 @@
+#ifndef __BANCHARO_AST__H__
+#define __BANCHARO_AST__H__
+
 #include "bancharo.h"
 #include "scanner.h"
 #include "string.h"
@@ -15,3 +18,5 @@ AST_NODE *right_ast_node(char *lexmes, int token, AST_NODE **node);
 AST_NODE *left_ast_node(char *lexmes, int token, AST_NODE **node);
 AST_NODE *make_ast_tree(AST_NODE **node);
 void print_tree(AST_NODE **p_tree);
+
+#endif

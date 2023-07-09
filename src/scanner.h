@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __BANCHARO_SCANNER__H__
+#define __BANCHARO_SCANNER__H__
 
 #include "bancharo.h"
 #include "tokens.h"
@@ -16,3 +17,4 @@ bool is_opr();
 void set_buf(int32_t location);
 bool is_char();
 bool is_print();
+#endif

@@ -1,4 +1,5 @@
 #include "bancharo.h"
+#include "codegen.h"
 #include "parser.h"
 
 char current_char = 0;
@@ -34,7 +35,11 @@ int main(int argc, char *argv[]) {
         (*p_tree) = (*p_tree)->left;
         printf("finished creating nodes\n");
 
+#if 0
         print_tree(p_tree);
+#endif
+
+        parse_tree(p_tree);
 
         free(s_node);
         free(p_node);

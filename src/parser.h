@@ -1,4 +1,6 @@
-#pragma once
+#ifndef __BANCHARO_PARSER_H__
+#define __BANCHARO_PARSER_H__
+
 #include "ast.h"
 #include "bancharo.h"
 #include "scanner.h"
@@ -16,3 +18,5 @@ bool check_print(AST_NODE **node);
 void identify_next_character();
 void reset_buf(int32_t *prev_pointer, int32_t *prev_line);
 AST_NODE **parse_syntax();
+
+#endif

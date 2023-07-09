@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __BANCHARO_MAIN__H__
+#define __BANCHARO_MAIN__H__
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -16,3 +17,4 @@ extern int32_t column;
 // not have to rely of syscalls on every
 // characters
 void copy_buffer(char *file);
+#endif

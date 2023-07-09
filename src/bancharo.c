@@ -34,13 +34,6 @@ int main(int argc, char *argv[]) {
         (*p_tree) = (*p_tree)->left;
         printf("finished creating nodes\n");
 
-        printf("%s\n", (*p_tree)->value);
-        printf("%s\n", (*p_tree)->left->value);
-        printf("%s\n", (*p_tree)->right->value);
-
-        printf("%s\n", (*p_tree)->left->left->value);
-        printf("%s\n", (*p_tree)->left->left->left->value);
-        printf("%s\n", (*p_tree)->left->left->right->value);
         free(s_node);
         free(p_node);
         free(p_tree);

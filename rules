@@ -1,0 +1,8 @@
+structs should be CAPS_ED
+function should be snake_case
+variables should be snake_case
+const where possible
+strictly defined types wherever possible
+
+global variables for multiple access things
+header file should contain all the include

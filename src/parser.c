@@ -332,8 +332,6 @@ bool check_while(AST_NODE **while_node) {
 bool check_print(AST_NODE **print_node) {
         int32_t prev_pointer = char_pointer;
         int32_t prev_line = lines;
-        int32_t digit = 0;
-        char buffer[256];
         struct AST_NODE *node = malloc(sizeof(AST_NODE));
 
         identify_tokens();
@@ -344,24 +342,34 @@ bool check_print(AST_NODE **print_node) {
         }
         identify_next_character();
 
-        right_ast_node("print", PRINT, &node);
         if (tokens != PRINT) {
                 reset_buf(&prev_pointer, &prev_line);
                 print_node = NULL;
                 return false;
         }
+        right_ast_node("print", PRINT, &node);
         // this creates the one and only needed node
-        right_ast_node("printf", PRINT, &node->right);
         identify_next_character();
 
         if (tokens == IDENT || tokens == DIGIT) {
+                if (tokens == DIGIT) {
+                        int32_t digit = get_number();
+                        char buffer[256];
+                        snprintf(buffer, 256, "%d", digit);
+                        left_ast_node(buffer, DIGIT, &node->right);
+                } else if (tokens == IDENT) {
+                        left_ast_node(value, IDENT, &node->right);
+                }
         } else {
                 reset_buf(&prev_pointer, &prev_line);
                 print_node = NULL;
                 return false;
         }
+        // empty node
+        // I have no clue why removing this will make print dissappear
+        // in our codegen
+        left_ast_node("", PRINT, &node->right);
         identify_next_character();
-        left_ast_node("something", DIGIT, &node->right);
 
         if (tokens != S_R_PAREN) {
                 reset_buf(&prev_pointer, &prev_line);
@@ -370,9 +378,8 @@ bool check_print(AST_NODE **print_node) {
         }
         next_buf();
 
-        *print_node = node;
+        *print_node = node->right;
 
-        printf("print\n");
         return true;
 }
 

@@ -34,6 +34,9 @@ void parse_tree(AST_NODE **node) {
                         case SETQ:
                                 asm_setq(val1, val2);
                                 break;
+                        case PRINT:
+                                asm_print(val1);
+                                break;
                         }
                         if ((*node)->left->left->token == RET) {
                                 printf("RET\n\n");
@@ -44,16 +47,16 @@ void parse_tree(AST_NODE **node) {
 }
 
 void asm_add(char *val1, char *val2) {
-        printf("mov rax, %s\n", val1);
-        printf("mov rbx, %s\n", val2);
-        printf("add rax, rbx\n\n");
+        // printf("mov rax, %s\n", val1);
+        // printf("mov rbx, %s\n", val2);
+        printf("add rax, %s\n", val1);
 }
 
 void asm_setq(char *val1, char *val2) { printf("mov rax, %s\n", val1); }
 
 void asm_greater(char *val1, char *val2) {
-        printf("mov %s rax\n", val1);
-        printf("mov %s rax\n", val2);
+        printf("mov rax %s\n", val1);
+        printf("mov rbx %s\n", val2);
 }
 
 void asm_gen_label(AST_NODE **node, char *val1, char *val2) {
@@ -68,3 +71,5 @@ void asm_gen_label(AST_NODE **node, char *val1, char *val2) {
                 (*node) = (*node)->left;
         }
 }
+
+void asm_print(char *val1) { printf("call printf %s\n", val1); }

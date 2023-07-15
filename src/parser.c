@@ -67,6 +67,7 @@ bool check_setq(AST_NODE **setq_node) {
                         char buffer[256];
                         snprintf(buffer, 256, "%d", digit);
                         left_ast_node(buffer, DIGIT, &node->right);
+                        // insert_symbol(buffer);
                 }
         } else {
                 reset_buf(&prev_pointer, &prev_line);
@@ -107,8 +108,18 @@ bool check_operation(AST_NODE **opr_node) {
         }
         if (tokens == ADD) {
                 right_ast_node("+", ADD, &node);
-        } else {
+        } else if (tokens == SUB) {
                 right_ast_node("-", SUB, &node);
+        } else if (tokens == MUL) {
+                right_ast_node("*", MUL, &node);
+        } else if (tokens == DIV) {
+                right_ast_node("/", DIV, &node);
+        } else {
+                // NOTE: this condition should never execute but I want to write
+                // this error message somewhere. Might prolly write this
+                // whenever I have chance
+                fprintf(stderr, "%s\n", "identified wrong character");
+                fprintf(stderr, "%s\n", "error: are you out of your mind");
         }
         identify_next_character();
 

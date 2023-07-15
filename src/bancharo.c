@@ -10,6 +10,7 @@ int32_t column = 1;
 char *value = 0;
 
 int main(int argc, char *argv[]) {
+        init_symbol_table();
         copy_buffer(argv[1]);
 
         current_char = source_buffer[char_pointer];

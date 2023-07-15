@@ -1,0 +1,57 @@
+concept
+
+hash table has list of identifiers
+
+currently only focusing on integers of 4 bytes
+
+(setq val 2) to rbp - 4, 2
+(setq dig 3) to rbp - 8, 3
+(setq rig 5) to rbp - 12, 5
+
+when a setq operation is found
+setq identifier literal
+there is a counter whose inital value if zero
+if the counter is 0 add 4
+if the counter is not 0
+add + 4 to the counter
+and in hashmap counter + 4 is stored
+
+this would be
+(setq abc 12)
+counter += 4
+hashmap -> abc -> offset 4
+
+(setq bcd 49)
+counter += 4
+hashmap -> bcd -> offset 8
+
+
+Assembly example
+-----------------
+
+extern printf
+bits 64
+
+section .bss
+        store resb 1
+
+section .data
+        format_int dw "%d", 10, 0
+
+section .text
+global main
+
+
+main:
+        mov rax, 0
+
+        mov edx, 2147483647
+        mov [store + 4], edx
+ 
+        mov rdi, format_int
+        mov rsi, [store + 4]
+        call printf
+
+        mov rdi, 0
+        mov rax, 60
+        syscall

@@ -30,39 +30,21 @@ void parse_tree(AST_NODE **node) {
 
                         switch ((*node)->token) {
                         case ADD:
-                                if (val2.token == IDENT) {
-                                        val2.value = convert_offset(val2.value);
-                                }
-                                if (val1.token == IDENT) {
-                                        val1.value = convert_offset(val1.value);
-                                }
-                                asm_add(val1.value, val2.value);
+                                asm_add(val1, val2);
                                 break;
                         case LESSER:
-                                if (val2.token == IDENT) {
-                                        val2.value = convert_offset(val2.value);
-                                }
-                                if (val1.token == IDENT) {
-                                        val1.value = convert_offset(val1.value);
-                                }
                                 printf("label:\n");
-                                asm_gen_label(node, &val1, &val2);
-                                asm_cmp(val1.value, val2.value);
+                                asm_gen_label(node, val1, val2);
+                                asm_cmp(val1, val2);
                                 printf("jl label\n");
                                 break;
                         case SETQ:
                                 insert_symbol(val2.value);
                                 val2.value = convert_offset(val2.value);
-                                asm_setq(val1.value, val2.value);
+                                asm_setq(val1, val2);
                                 break;
                         case PRINT:
-                                if (val2.token == IDENT) {
-                                        val2.value = convert_offset(val2.value);
-                                }
-                                if (val1.token == IDENT) {
-                                        val1.value = convert_offset(val1.value);
-                                }
-                                asm_print(val1.value);
+                                asm_print(val1);
                                 break;
                         }
                         if ((*node)->left->left->token == RET) {
@@ -73,47 +55,72 @@ void parse_tree(AST_NODE **node) {
         }
 }
 
-void asm_add(char *val1, char *val2) { printf("add %s, %s\n", val2, val1); }
-
-void asm_cmp(char *val1, char *val2) { printf("cmp %s, %s\n", val1, val2); }
-
-void asm_setq(char *val1, char *val2) {
-        printf("mov eax, %s\n", val1);
-        printf("mov %s, eax\n", val2);
+void asm_add(TABLE val1, TABLE val2) {
+        if (val2.token == IDENT) {
+                val2.value = convert_offset(val2.value);
+        }
+        if (val1.token == IDENT) {
+                val1.value = convert_offset(val1.value);
+        }
+        printf("add %s, %s\n", val2.value, val1.value);
 }
 
-void asm_greater(char *val1, char *val2) {
-        printf("mov rax %s\n", val1);
-        printf("mov rbx %s\n", val2);
+void asm_cmp(TABLE val1, TABLE val2) {
+        if (val2.token == IDENT) {
+                val2.value = convert_offset(val2.value);
+        }
+        if (val1.token == IDENT) {
+                val1.value = convert_offset(val1.value);
+        }
+        printf("cmp %s, %s\n", val1.value, val2.value);
 }
 
-void asm_gen_label(AST_NODE **node, TABLE *val1, TABLE *val2) {
+void asm_setq(TABLE val1, TABLE val2) {
+        printf("mov eax, %s\n", val1.value);
+        printf("mov %s, eax\n", val2.value);
+}
+
+void asm_greater(TABLE val1, TABLE val2) {
+        printf("mov rax %s\n", val1.value);
+        printf("mov rbx %s\n", val2.value);
+}
+
+void asm_gen_label(AST_NODE **node, TABLE val1, TABLE val2) {
+        if (val2.token == IDENT) {
+                val2.value = convert_offset(val2.value);
+        }
+        if (val1.token == IDENT) {
+                val1.value = convert_offset(val1.value);
+        }
         while ((*node)->left->left->token != RET) {
                 if ((*node)->left->token == IDENT ||
                     (*node)->left->token == DIGIT) {
                 } else {
-                        val1->value = (*node)->left->left->value;
-                        val2->value = (*node)->left->right->value;
+                        val1.value = (*node)->left->left->value;
+                        val2.value = (*node)->left->right->value;
 
-                        val1->token = (*node)->left->left->token;
-                        val2->token = (*node)->left->right->token;
+                        val1.token = (*node)->left->left->token;
+                        val2.token = (*node)->left->right->token;
 
-                        if (val2->token == IDENT) {
-                                val2->value = convert_offset(val2->value);
+                        if (val2.token == IDENT) {
+                                val2.value = convert_offset(val2.value);
                         }
-                        if (val1->token == IDENT) {
-                                val1->value = convert_offset(val1->value);
+                        if (val1.token == IDENT) {
+                                val1.value = convert_offset(val1.value);
                         }
-                        asm_add(val1->value, val2->value);
+                        asm_add(val1, val2);
                 }
                 (*node) = (*node)->left;
         }
 }
 
-void asm_print(char *val) {
+void asm_print(TABLE val) {
+        if (val.token == IDENT) {
+                val.value = convert_offset(val.value);
+        }
         printf("mov rax, 0\n");
         printf("mov rdi, format_int\n");
-        printf("mov rsi, %s\n", val);
+        printf("mov rsi, %s\n", val.value);
         printf("call printf\n");
 }
 char *convert_offset(char *val) {

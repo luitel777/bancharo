@@ -6,12 +6,12 @@
 
 void parse_tree(AST_NODE **node);
 
-void asm_add(char *val1, char *val2);
-void asm_setq(char *val1, char *val2);
-void asm_greater(char *val1, char *val2);
-void asm_gen_label(AST_NODE **node, TABLE *val1, TABLE *val2);
-void asm_print(char *val1);
-void asm_cmp(char *val1, char *val2);
+void asm_add(TABLE val1, TABLE val2);
+void asm_setq(TABLE val1, TABLE val2);
+void asm_greater(TABLE val1, TABLE val2);
+void asm_gen_label(AST_NODE **node, TABLE val1, TABLE val2);
+void asm_print(TABLE val1);
+void asm_cmp(TABLE val1, TABLE val2);
 char *convert_offset(char *val);
 
 #endif

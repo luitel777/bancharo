@@ -16,7 +16,6 @@ void parse_tree(AST_NODE **node) {
 
         char *val1 = malloc(sizeof(char) * 256);
         char *val2 = malloc(sizeof(char) * 256);
-        char *val3 = malloc(sizeof(char) * 256);
 
         if ((*node) != NULL) {
                 if ((*node)->right != NULL) {
@@ -53,6 +52,8 @@ void parse_tree(AST_NODE **node) {
                 }
                 parse_tree(&(*node)->left);
         }
+        free(val1);
+        free(val2);
 }
 
 void asm_add(TABLE val1, TABLE val2) {

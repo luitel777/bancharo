@@ -1,1 +1,1 @@
-gcc src/ast.c src/hashmap.c src/codegen.c src/bancharo.c src/parser.c src/scanner.c -g && ./a.out test
+gcc src/ast.c src/hashmap.c src/codegen.c src/bancharo.c src/parser.c src/scanner.c -g -o bancharo && ./bancharo test

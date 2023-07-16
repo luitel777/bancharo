@@ -1,10 +1,14 @@
-(setq abc 4)
+(setq abc 1)
 (+ abc 1)
 
-(print 132)
+(print abc)
+(print 124)
 
 (while (< abc 10)
 	(+ abc 1)
 	(+ abc 3))
 
-(setq abc 44)
+(setq once 44)
+(print once)
+
+(print abc)

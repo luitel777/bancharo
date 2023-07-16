@@ -1,1 +1,6 @@
 a compiler attempt
+
+./run.sh
+./bancharo test > bancharo.asm
+nasm -felf64 bancharo.asm -g -F dwarf && gcc bancharo.o -no-pie -o my_hello_world
+./my_hello_world

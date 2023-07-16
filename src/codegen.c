@@ -1,6 +1,7 @@
 #include "codegen.h"
 #include "scanner.h"
 
+int32_t label_counter = 0;
 void parse_tree(AST_NODE **node) {
 #if 0
         while (*node != NULL) {
@@ -34,18 +35,20 @@ void parse_tree(AST_NODE **node) {
                                 asm_add(val1, val2);
                                 break;
                         case LESSER:
+                                label_counter++;
                                 printf("mov eax, %s\n", val1.value);
-                                printf("label:\n");
+                                printf("label_%d:\n", label_counter);
                                 asm_gen_label(node, val1, val2);
                                 asm_cmp(val1, val2);
-                                printf("jl label\n");
+                                printf("jl label_%d\n", label_counter);
                                 break;
                         case GREATER:
+                                label_counter++;
                                 printf("mov eax, %s\n", val1.value);
-                                printf("label:\n");
+                                printf("label_%d:\n", label_counter);
                                 asm_gen_label(node, val1, val2);
                                 asm_cmp(val1, val2);
-                                printf("jg label\n");
+                                printf("jg label_%d\n", label_counter);
                                 break;
                         case SETQ:
                                 insert_symbol(val2.value);

@@ -32,6 +32,7 @@ void parse_tree(AST_NODE **node) {
                                 asm_add(val1, val2);
                                 break;
                         case LESSER:
+                                printf("mov eax, %s\n", val1.value);
                                 printf("label:\n");
                                 asm_gen_label(node, val1, val2);
                                 asm_cmp(val1, val2);
@@ -59,11 +60,15 @@ void parse_tree(AST_NODE **node) {
 void asm_add(TABLE val1, TABLE val2) {
         if (val2.token == IDENT) {
                 val2.value = convert_offset(val2.value);
-        }
-        if (val1.token == IDENT) {
+                printf("mov edx, %s\n", val1.value);
+                printf("add %s, edx\n", val2.value);
+        } else if (val1.token == IDENT) {
                 val1.value = convert_offset(val1.value);
+                printf("mov edx, %s\n", val2.value);
+                printf("add %s, edx\n", val1.value);
+        } else {
+                printf("mov %s, %s", val2.value, val2.value);
         }
-        printf("add %s, %s\n", val2.value, val1.value);
 }
 
 void asm_cmp(TABLE val1, TABLE val2) {
@@ -73,7 +78,8 @@ void asm_cmp(TABLE val1, TABLE val2) {
         if (val1.token == IDENT) {
                 val1.value = convert_offset(val1.value);
         }
-        printf("cmp %s, %s\n", val1.value, val2.value);
+        printf("mov edx, %s\n", val2.value);
+        printf("cmp edx, eax\n");
 }
 
 void asm_setq(TABLE val1, TABLE val2) {
@@ -103,12 +109,6 @@ void asm_gen_label(AST_NODE **node, TABLE val1, TABLE val2) {
                         val1.token = (*node)->left->left->token;
                         val2.token = (*node)->left->right->token;
 
-                        if (val2.token == IDENT) {
-                                val2.value = convert_offset(val2.value);
-                        }
-                        if (val1.token == IDENT) {
-                                val1.value = convert_offset(val1.value);
-                        }
                         asm_add(val1, val2);
                 }
                 (*node) = (*node)->left;

@@ -5,6 +5,7 @@
 (print 124)
 
 (while (< abc 10)
+	(print abc)
 	(- abc 1)
 	(+ abc 3))
 

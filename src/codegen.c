@@ -28,6 +28,8 @@ void parse_tree(AST_NODE **node) {
                         val2.token = (*node)->right->token;
 
                         switch ((*node)->token) {
+                        case SUB:
+                                asm_sub(val1, val2);
                         case ADD:
                                 asm_add(val1, val2);
                                 break;

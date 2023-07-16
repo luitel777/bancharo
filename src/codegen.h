@@ -7,6 +7,7 @@
 void parse_tree(AST_NODE **node);
 
 void asm_add(TABLE val1, TABLE val2);
+void asm_sub(TABLE val1, TABLE val2);
 void asm_setq(TABLE val1, TABLE val2);
 void asm_greater(TABLE val1, TABLE val2);
 void asm_gen_label(AST_NODE **node, TABLE val1, TABLE val2);

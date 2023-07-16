@@ -309,7 +309,8 @@ bool check_while(AST_NODE **while_node) {
         AST_NODE **t_p_node = malloc(sizeof(AST_NODE));
 
         (*t_p_node) = p_node;
-        while (check_operation(while_temp_node)) {
+        while (check_operation(while_temp_node) ||
+               check_print(while_temp_node)) {
                 while ((p_node)->left != NULL) {
                         (p_node) = (p_node)->left;
                 }

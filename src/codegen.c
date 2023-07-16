@@ -128,6 +128,8 @@ void asm_gen_label(AST_NODE **node, TABLE val1, TABLE val2) {
                                 asm_add(val1, val2);
                         } else if ((*node)->left->token == SUB) {
                                 asm_sub(val1, val2);
+                        } else if ((*node)->left->token == PRINT) {
+                                asm_print(val1);
                         }
                 }
                 (*node) = (*node)->left;
@@ -138,10 +140,14 @@ void asm_print(TABLE val) {
         if (val.token == IDENT) {
                 val.value = convert_offset(val.value);
         }
+        // eax is lower 32 bit of rax so changing rax to 0
+        // will change eax to 0 as well
+        printf("mov ebx, eax\n");
         printf("mov rax, 0\n");
         printf("mov rdi, format_int\n");
         printf("mov rsi, %s\n", val.value);
         printf("call printf\n");
+        printf("mov eax, ebx\n");
 }
 char *convert_offset(char *val) {
         // [store + ]

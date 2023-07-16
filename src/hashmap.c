@@ -43,6 +43,7 @@ TABLE *retrive_symbol(char *value) {
                 return &symbols->tables[index];
         } else {
                 printf("value not found\n");
+                printf("ERROR: symbol may not be defined\n");
                 exit(0);
                 // return "not found";
         }

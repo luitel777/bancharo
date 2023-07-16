@@ -71,6 +71,20 @@ void asm_add(TABLE val1, TABLE val2) {
         }
 }
 
+void asm_sub(TABLE val1, TABLE val2) {
+        if (val2.token == IDENT) {
+                val2.value = convert_offset(val2.value);
+                printf("mov edx, %s\n", val1.value);
+                printf("sub %s, edx\n", val2.value);
+        } else if (val1.token == IDENT) {
+                val1.value = convert_offset(val1.value);
+                printf("mov edx, %s\n", val2.value);
+                printf("sub %s, edx\n", val1.value);
+        } else {
+                printf("mov %s, %s", val2.value, val2.value);
+        }
+}
+
 void asm_cmp(TABLE val1, TABLE val2) {
         if (val2.token == IDENT) {
                 val2.value = convert_offset(val2.value);
@@ -108,8 +122,11 @@ void asm_gen_label(AST_NODE **node, TABLE val1, TABLE val2) {
 
                         val1.token = (*node)->left->left->token;
                         val2.token = (*node)->left->right->token;
-
-                        asm_add(val1, val2);
+                        if ((*node)->left->token == ADD) {
+                                asm_add(val1, val2);
+                        } else if ((*node)->left->token == SUB) {
+                                asm_sub(val1, val2);
+                        }
                 }
                 (*node) = (*node)->left;
         }

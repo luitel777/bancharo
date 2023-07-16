@@ -41,7 +41,9 @@ int main(int argc, char *argv[]) {
         print_tree(p_tree);
 #endif
 
+        front_boilerplate();
         parse_tree(p_tree);
+        end_boilerplate();
 
         free(s_node);
         free(p_node);

@@ -131,3 +131,25 @@ char *convert_offset(char *val) {
         snprintf(value, 256, "[store + %d]", tempa->size_value);
         return value;
 }
+
+void front_boilerplate() {
+        printf("extern printf\n");
+        printf("bits 64\n");
+        printf("\n");
+        printf("section .bss\n");
+        printf("store resb 1\n");
+        printf("\n");
+        printf("section .data\n");
+        printf("format_int dw \"%%d\", 10, 0\n");
+        printf("\n");
+        printf("section .text\n");
+        printf("global main\n");
+        printf("\n");
+        printf("main:\n");
+}
+
+void end_boilerplate() {
+        printf("mov rdi, 0\n");
+        printf("mov rax, 60\n");
+        printf("syscall\n");
+}

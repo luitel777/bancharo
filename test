@@ -5,7 +5,7 @@
 (print 124)
 
 (while (< abc 10)
-	(+ abc 1)
+	(- abc 1)
 	(+ abc 3))
 
 (setq once 44)

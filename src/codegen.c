@@ -40,6 +40,13 @@ void parse_tree(AST_NODE **node) {
                                 asm_cmp(val1, val2);
                                 printf("jl label\n");
                                 break;
+                        case GREATER:
+                                printf("mov eax, %s\n", val1.value);
+                                printf("label:\n");
+                                asm_gen_label(node, val1, val2);
+                                asm_cmp(val1, val2);
+                                printf("jg label\n");
+                                break;
                         case SETQ:
                                 insert_symbol(val2.value);
                                 val2.value = convert_offset(val2.value);

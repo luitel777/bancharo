@@ -1,20 +1,11 @@
-(setq abc 1)
+(setq abc 0)
 (+ abc 1)
 
-(print abc)
-(print 124)
-
-(while (< abc 10)
+(while (< abc 65536)
+	(* abc 4)
+	(* abc 4)
+	(/ abc 4)
 	(print abc)
-	(- abc 1)
-	(+ abc 3))
-
-(setq hallo_uwu 10)
-(while (> hallo_uwu 0)
-	(print hallo_uwu)
-	(- hallo_uwu 1) )
-
-(setq once 44)
-(print once)
+)
 
 (print abc)

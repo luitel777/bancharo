@@ -34,6 +34,12 @@ void parse_tree(AST_NODE **node) {
                         case ADD:
                                 asm_add(val1, val2);
                                 break;
+                        case MUL:
+                                asm_mul(val1, val2);
+                                break;
+                        case DIV:
+                                asm_div(val1, val2);
+                                break;
                         case LESSER:
                                 label_counter++;
                                 printf("mov eax, %s\n", val1.value);
@@ -75,11 +81,78 @@ void asm_add(TABLE val1, TABLE val2) {
                 printf("mov edx, %s\n", val1.value);
                 printf("add %s, edx\n", val2.value);
         } else if (val1.token == IDENT) {
-                val1.value = convert_offset(val1.value);
-                printf("mov edx, %s\n", val2.value);
-                printf("add %s, edx\n", val1.value);
+                // (+ DIGIT IDENT) is kinda unnecessary but allowed by syntax so
+                // we ignore this
         } else {
-                printf("mov %s, %s", val2.value, val2.value);
+                // Do nothing cuz you are not using that value anyway
+        }
+}
+
+void asm_mul(TABLE val1, TABLE val2) {
+        // (* abc 12)
+
+        if (val2.token == IDENT) {
+                val2.value = convert_offset(val2.value);
+
+                // we save the existing value of rax and rbx in r8
+                printf("mov r8, rax\n");
+                printf("mov r9, rbx\n");
+
+                // we load our value in rax and rbx
+                printf("mov rax, %s\n", val1.value);
+                printf("mov rbx, %s\n", val2.value);
+
+                // we multiply next
+                printf("imul rbx\n");
+
+                // we load rax in our value
+                printf("mov %s, rax\n", val2.value);
+
+                // reset rax to old status
+                printf("mov rax, r8\n");
+                printf("mov rbx, r9\n");
+
+        } else if (val1.token == IDENT) {
+                // (* DIGIT IDENT) is kinda unnecessary but allowed by syntax so
+                // we ignore this
+        } else {
+                // Do nothing cuz you are not using that value anyway
+        }
+}
+
+void asm_div(TABLE val1, TABLE val2) {
+
+        // (/ IDENT DIGIT)
+
+        if (val2.token == IDENT) {
+                val2.value = convert_offset(val2.value);
+
+                // we save the existing value of rax, rbx and rdx
+                printf("mov r8, rax\n"); // divident low
+                printf("mov r9, rbx\n"); // divisor
+                printf("mov r11, rdx\n"); // divident high
+                // quoitent is stored in rax
+
+                // we load our value in eax and ebx
+                printf("mov rdx, 0\n");
+                printf("mov rbx, %s\n", val1.value);
+                printf("mov rax, %s\n", val2.value);
+
+                // we divide next
+                printf("div rbx\n");
+
+                // we load rax (quoitent) in our value
+                printf("mov %s, rax\n", val2.value);
+
+                // reset rax to old status
+                printf("mov rax, r8\n");
+                printf("mov rbx, r9\n");
+                printf("mov rdx, r11\n");
+        } else if (val1.token == IDENT) {
+                // (/ DIGIT IDENT) is kinda unnecessary but allowed by syntax so
+                // we ignore this
+        } else {
+                // Do nothing cuz you are not using that value anyway
         }
 }
 
@@ -89,11 +162,10 @@ void asm_sub(TABLE val1, TABLE val2) {
                 printf("mov edx, %s\n", val1.value);
                 printf("sub %s, edx\n", val2.value);
         } else if (val1.token == IDENT) {
-                val1.value = convert_offset(val1.value);
-                printf("mov edx, %s\n", val2.value);
-                printf("sub %s, edx\n", val1.value);
+                // (- DIGIT IDENT) is kinda unnecessary but allowed by syntax so
+                // we ignore this
         } else {
-                printf("mov %s, %s", val2.value, val2.value);
+                // Do nothing cuz you are not using that value anyway
         }
 }
 
@@ -138,6 +210,10 @@ void asm_gen_label(AST_NODE **node, TABLE val1, TABLE val2) {
                                 asm_add(val1, val2);
                         } else if ((*node)->left->token == SUB) {
                                 asm_sub(val1, val2);
+                        } else if ((*node)->left->token == MUL) {
+                                asm_mul(val1, val2);
+                        } else if ((*node)->left->token == DIV) {
+                                asm_div(val1, val2);
                         } else if ((*node)->left->token == PRINT) {
                                 asm_print(val1);
                         }
